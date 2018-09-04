@@ -78,6 +78,8 @@
 const express = require('express');
 // Include mongoose
 const mongoose = require('mongoose');
+// Include JWT
+const jwt = require('jsonwebtoken');
 // Inculde cors
 const cors = require('cors');
 // inculde apollo-server-express
@@ -122,6 +124,22 @@ const corsOptions = {
 }
 app.use(cors(corsOptions));
 
+// set up JWT authentication middleware
+app.use(async(req, res, next) => {
+    const token = req.headers['authorization'];
+    if(token !== null){
+        
+        try {
+            const currentUser = jwt.verify(token, 'asasfere3rfgfgo')
+            req.currentUser = currentUser;
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+    next()
+})
+
 // create graphiql middleware application
 app.use('/graphiql', graphiqlExpress({
     endpointURL: '/graphql'
@@ -130,14 +148,16 @@ app.use('/graphiql', graphiqlExpress({
 
 app.use('/graphql',
 express.json(),
-graphqlExpress({
+graphqlExpress( ({currentUser}) =>({
     schema,
     context: {
         Recipe,
-        User
+        User,
+        currentUser
     }
 
-}))
+})
+));
 
 
 

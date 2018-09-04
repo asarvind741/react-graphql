@@ -2,6 +2,7 @@ import React from 'react';
 import { Mutation } from 'react-apollo';
 import { SIGNUP_USER } from '../../queries/index';
 import Spinner from '../UI/Spinner/Spinner';
+import { withRouter } from 'react-router-dom';
 class Signup extends React.Component {
 
     state = {
@@ -12,23 +13,35 @@ class Signup extends React.Component {
         loading : false,
         error: null
     }
+
+    clearState = () => {
+        this.setState({
+            username: '',
+            email: '',
+            password: '',
+            confirmPassword: ''
+        })
+    }
     onSignupSubmit =(event, signupUser) => {
         this.setState({
             loading: true
         })
         event.preventDefault();
        
-        signupUser().then(data => {
-            console.log(data);
+        signupUser().then(async(data) => {
             this.setState({
                 loading: false
             })
+            await this.props.refetch();
+            this.clearState();
+
         })
         .catch((err) => {
-            console.log(err)
             this.setState({
-                loading: false
+                loading: false,
+                error:err.message
             })
+            this.clearState()
         })
     }
 
@@ -43,15 +56,26 @@ class Signup extends React.Component {
     
         this.props.history.goBack();
     }
+
+    validateForm = () => {
+        const { username, email, password, confirmPassword } = this.state;
+
+        const isInvalid = !username || !email || !password || !confirmPassword
+        || password !== confirmPassword
+
+        return isInvalid;
+    }
     
     render(){
 
-        const { username, email, password } = this.state;
+        const { username, email, password, confirmPassword } = this.state;
         let signpuCom = (
             <Mutation mutation = { SIGNUP_USER } variables = {{ username, email, password}}>
 
 
             {(signupUser, {data, loading, error}) => {
+                console.log("data", data);
+                console.log("err", error);
                 
                 return (
                     <form 
@@ -95,13 +119,16 @@ class Signup extends React.Component {
                         onChange = { this.handleChange}/>
                         </div>
             
-                        <button className = "btn btn-primary" type = "submit"> Submit</button>
+                        <button 
+                        disabled = { loading || this.validateForm()}
+                        className = "btn btn-primary" 
+                        type = "submit"> Submit</button>
                         <button 
                         className = "btn btn-danger" 
                         type = "button" 
                         onClick = {this.cancelSubmit}
                         style = {{'margin': '5px'}}> Cancel</button>
-                        {error && <div>Error Occured</div>}
+                        {this.state.error? <p>{this.state.error}</p>:''}
                     </form>
                     
                 )
@@ -124,4 +151,4 @@ class Signup extends React.Component {
     }
 }
 
-export default Signup;
+export default withRouter(Signup);

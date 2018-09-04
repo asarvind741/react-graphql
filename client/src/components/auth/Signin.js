@@ -2,6 +2,8 @@ import React from 'react';
 import { Mutation } from 'react-apollo';
 import { SIGNIN_USER } from '../../queries/index';
 import Spinner from '../UI/Spinner/Spinner';
+
+import { withRouter } from 'react-router-dom';
 class Signup extends React.Component {
 
     state = {
@@ -16,19 +18,27 @@ class Signup extends React.Component {
         })
         event.preventDefault();
        
-        signinUser().then(data => {
-            console.log(data);
+        signinUser().then(async({data}) => {
             this.setState({
                 loading: false
             })
-
-            localStorage.setItem('currentUser', data.signinUser.token)
+            localStorage.setItem('token', data.signinUser.token);
+            await this.props.refetch();
+            this.clearState();
+            this.props.history.push('/')
         })
         .catch((err) => {
-            console.log(err)
             this.setState({
                 loading: false
             })
+            this.clearState();
+        })
+    }
+
+    clearState = () => {
+        this.setState({
+            username: '',
+            password: ''
         })
     }
 
@@ -99,7 +109,7 @@ class Signup extends React.Component {
         return (
         <div className = "App">
         <h2 className = "App">
-        Signup
+        Signin
         </h2>
          { signinUse }
         </div>
@@ -107,4 +117,4 @@ class Signup extends React.Component {
     }
 }
 
-export default Signup;
+export default withRouter(Signup);
