@@ -104,7 +104,6 @@ const schema = makeExecutableSchema({
 
 
 // Create mongo connect
-console.log(process.env.MONGO_URI)
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         console.log('DB connected')
@@ -116,6 +115,12 @@ mongoose.connect(process.env.MONGO_URI)
 // Create app
 const app = express()
 
+// cross origin domain
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true
+}
+app.use(cors(corsOptions));
 
 // create graphiql middleware application
 app.use('/graphiql', graphiqlExpress({

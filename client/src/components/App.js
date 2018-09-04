@@ -16,7 +16,7 @@ const App = () => (
       console.log(error);
       return <div>Error</div>;
     }
-    console.log(data);  
+    
     return (
       <p>Recipes</p>
     )
