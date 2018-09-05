@@ -12,6 +12,19 @@ exports.resolvers = {
             const allRecipes =  await Recipe.find();
             return allRecipes;          
         },
+        getRecipe: async(root, {id}, {Recipe}) => {
+            if(!id){
+                return Null;
+            }
+
+            const recipe = await Recipe.findOne({_id: id});
+
+            if(!Recipe){
+                throw new Error('No Recipe Found')
+            }
+
+            return recipe;
+        },
         getCurrentUser: async(root, args, { currentUser, User}) => {
             if(!currentUser){
                 return null;
@@ -22,8 +35,6 @@ exports.resolvers = {
                 path: 'favourites',
                 model: 'Recipe'
             });
-
-            console.log("usds", user)
 
             return user;
         }
