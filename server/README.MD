@@ -8,3 +8,6 @@ https://www.prisma.io/blog/graphql-schema-stitching-explained-schema-delegation-
 Apollo Client
 
 https://www.apollographql.com/docs/react/
+
+ymple URL:
+http://www.ymple.com/en/feature/

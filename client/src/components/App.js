@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { Fragment} from 'react';
 import './App.css';
 
 import { Query } from 'react-apollo';
 import { GET_ALL_QUERIES } from '../queries/index';
+import RecipeItem from './Recipe/RecipeItem';
+
 
 
 
@@ -16,9 +18,15 @@ const App = () => (
       console.log(error);
       return <div>Error</div>;
     }
+    const recipeItems = data.getAllRecipes.map((recipeItem, index) => (
+      <RecipeItem item = {recipeItem} key = { index} />
+    ))
     
     return (
+      <Fragment>
       <p>Recipes</p>
+      <ul>{recipeItems}</ul>
+      </Fragment>
     )
   }}
  

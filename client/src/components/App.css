@@ -47,3 +47,14 @@ textarea {
   color: red;
   cursor: pointer;
 }
+
+.RecipeItem {
+  display: inline-block;
+  margin: 5px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 2px #eee;
+  min-width: 200px;
+  background-color: antiquewhite;
+  vertical-align: top;
+  padding: 10px;
+}

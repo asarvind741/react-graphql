@@ -5,6 +5,7 @@ export const GET_ALL_QUERIES = gql `
 
 query {
     getAllRecipes {
+        id
         name
         description
         instructions
@@ -13,6 +14,16 @@ query {
         createdDate
         username
     }
+}
+`
+
+export const GET_RECIPE_BY_ID = gql `
+
+query($id: ID!) {
+  getRecipe(id: $id){
+    name
+    description
+  }
 }
 `
 

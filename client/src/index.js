@@ -8,7 +8,8 @@ import Signup from './components/auth/Signup';
 import Navbar from './components/navbar';
 import Search from './components/Recipe/Search';
 import AddRecipe from './components/Recipe/AddRecipe';
-import Profile from './components/Profile/Profile'
+import Profile from './components/Profile/Profile';
+import RecipeDetails from './components/Recipe/RecipeDetails';
 import registerServiceWorker from './registerServiceWorker';
 import withSession from './components/withSession'
 
@@ -46,13 +47,13 @@ const Root = ({refetch, session}) => {
     <Navbar session = {session}/>
     <Switch>
         <Route path = "/signin" render  = {() => <Signin refetch = {refetch} />}/>
+        <Route path = "/recipe/:id" render = {() => <RecipeDetails />} />
         <Route path = "/recipe/add" render  = {() => <AddRecipe refetch = {refetch} />}/>
         <Route path = "/profile" render  = {() => <Profile refetch = {refetch} />}/>
         <Route path = "/search" render  = {() => <Search refetch = {refetch} />}/>
         <Route path = "/signup" render  = {() => <Signup refetch = {refetch} />} />
         <Route path = "/" exact component = { App} />
         <Redirect to = "/" />
-
     </Switch>
     </Fragment>
     </BrowserRouter>
